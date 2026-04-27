@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Car {
+  id          String   @id @default(cuid())
+  make        String
+  model       String
+  type        String
+  year        String
+  price       String
+  mileage     String
+  location    String
+  owner       String
+  description String 
+  images      Json
+  createdAt   DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  password  String
+  avatar    String?
+
+  sentConversations     Conversation[] @relation("sender")
+  receivedConversations Conversation[] @relation("receiver")
+
+  sentMessages Message[] @relation("sender")
+}
+
+model Conversation {
+  id         String   @id @default(cuid())
+  senderId   String
+  receiverId String
+  carId      String?
+
+  sender   User @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  messages Message[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([senderId, receiverId, carId])
+}
+
+model Message {
+  id             String   @id @default(cuid())
+  conversationId String
+  senderId       String
+  content        String
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User         @relation("sender", fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+model ClassicCarArticle {
+  id             String   @id @default(cuid())
+  name           String
+  year           Int
+  country        String
+  make           String
+  era            String
+  type           String
+  produced       Int
+  engine         String
+  horsepower     String
+  topSpeed       Int
+  price          String
+  rarity         String
+  image          String
+  images         Json?
+  description    String
+  fullHistory    String
+  highlights     Json
+  designer       String
+  weight         String
+  raceHistory    String
+  collectorsInfo String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
