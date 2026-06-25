@@ -4,7 +4,9 @@ export async function getUserProfile() {
   const res = await fetch("/api/user", {
     credentials: "include",
   });
+  if (!res.ok) throw new Error("Failed to fetch user");
   return res.json();
+  
 }
 
 export async function updateUserProfile(data: {

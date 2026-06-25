@@ -1,0 +1,363 @@
+Пълно ръководство: Ollama локално + интеграция в проекти
+Това описва какво имаш в Classic Car Center, как да го ползваш стъпка по стъпка, и как да го пренесеш в други проекти (Next.js, React, Node, Python и др.).
+
+1. Какво е Ollama и защо го ползваме
+Ollama е програма, която пуска AI модели локално на твоя компютър (без OpenAI ключ, без интернет за самия inference).
+
+Слуша на: http://127.0.0.1:11434
+Имаш REST API (като облачен AI, но локално)
+Моделите се теглят с ollama pull <име>
+В твоя проект браузърът не говори директно с Ollama, а през Next.js API route (/api/ollama). Това е важно за:
+
+CORS (браузърът често блокира директни заявки към localhost:11434)
+Скрит system prompt (правилата „само за коли“ са на сървъра, не в UI)
+По-късно: rate limit, логове, auth
+2. Инсталация на Ollama (macOS)
+2.1. Инсталирай Ollama
+От https://ollama.com — download за macOS
+Или терминал: brew install ollama (ако ползваш Homebrew)
+2.2. Стартирай услугата
+Обикновено приложението Ollama стартира сървъра автоматично. Провери:
+
+curl http://127.0.0.1:11434/api/tags
+Ако върне JSON с models — работи.
+
+2.3. Свали модел (задължително поне един)
+ollama pull llama3.2
+Други примери (по-малки = по-бързи на слаб Mac):
+
+ollama pull phi3
+ollama pull mistral
+ollama pull gemma2:2b
+Списък на инсталирани:
+
+ollama list
+2.4. Тест от терминала (без Next.js)
+ollama run llama3.2 "Какво е класическа кола?"
+Или директно API:
+
+curl http://127.0.0.1:11434/api/chat -d '{
+  "model": "llama3.2",
+  "messages": [{"role": "user", "content": "Здравей"}],
+  "stream": false
+}'
+3. Какво има в този проект (файлове)
+Файл	Роля
+app/api/ollama/route.ts
+Сървърен proxy към Ollama + system prompt „само коли“
+app/components/OllamaTest.tsx
+UI: избор на модел, въпрос, показване на отговор
+app/ollama-test/page.tsx
+Страница на адрес /ollama-test
+По избор в .env.local:
+
+OLLAMA_HOST=http://127.0.0.1:11434
+Ако липсва — ползва се http://127.0.0.1:11434.
+
+4. Как да го ползваш в Classic Car Center (стъпка по стъпка)
+Стъпка 1: Ollama да върви
+Отвори приложението Ollama или пусни ollama serve (рядко е нужно ръчно).
+Провери: curl http://127.0.0.1:11434/api/tags
+Стъпка 2: Имаш поне един модел
+ollama pull llama3.2
+Стъпка 3: Next.js dev сървър
+cd /Users/avramov/Desktop/ClassicCarCenter-nextjs/ccc
+npm run dev
+Стъпка 4: Отвори тест страницата
+В браузър:
+
+http://localhost:3000/ollama-test
+
+Стъпка 5: В UI
+Refresh models — зарежда моделите от Ollama.
+Избери Model (напр. llama3.2).
+Напиши въпрос само за коли.
+Изпрати въпрос — чакаш отговор (може 10–60+ сек. според Mac и модела).
+Стъпка 6: Какво се случва „под капака“
+[Браузър]  →  POST /api/ollama  { model, prompt }
+     ↓
+[Next.js route.ts]  →  добавя system prompt „само коли“
+     ↓
+[Ollama]  POST http://127.0.0.1:11434/api/chat
+     ↓
+[Отговор]  →  JSON с поле response (текст)
+GET /api/ollama → проксира към Ollama GET /api/tags (списък модели).
+
+POST /api/ollama → проксира към Ollama POST /api/chat с:
+
+role: system — правилата за коли
+role: user — твоят въпрос
+5. API на твоя проект (за тест с Postman/curl)
+Списък модели
+curl http://localhost:3000/api/ollama
+Очакван отговор (пример):
+
+{
+  "models": [
+    { "name": "llama3.2:latest", ... }
+  ]
+}
+В UI използваш точното name от dropdown-а.
+
+Въпрос към асистента
+curl -X POST http://localhost:3000/api/ollama \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.2",
+    "prompt": "Какво е matching numbers при класическа кола?",
+    "stream": false
+  }'
+Успех — в response е текстът на асистента.
+
+Грешки:
+
+503 — Ollama не работи / не е достъпен
+502 — Ollama върна грешка (грешен model name, няма RAM и т.н.)
+400 — липсва model или prompt
+6. Ограничение „само въпроси за коли“
+Това не е код, а system prompt в app/api/ollama/route.ts:
+
+Моделът получава инструкции да отговаря само за автомобили.
+При off-topic трябва да откаже кратко.
+Важно: Това е „меко“ ограничение. Малки модели понякога излизат извън темата. За по-строго:
+
+по-голям/по-умерен модел
+втори проверяващ prompt
+keyword филтър на сървъра преди chat
+За друг домейн (недвижими имоти, право) — сменяш текста на CARS_ONLY_SYSTEM_PROMPT.
+
+7. Чести проблеми и решения
+Симптом	Причина	Решение
+„Cannot connect to Ollama“
+Сървърът не върви
+Стартирай Ollama app / curl 127.0.0.1:11434/api/tags
+Няма модели в dropdown
+Не си pull-нал модел
+ollama pull llama3.2
+Много бавно
+Голям модел / слаб CPU
+По-малък модел: gemma2:2b, phi3
+model not found
+Грешно име
+ollama list — копирай точното име
+Празен отговор
+Моделът timeout / грешка
+Терминал на npm run dev + Ollama logs
+Работи в curl, не в UI
+Dev сървър спрян
+npm run dev на порт 3000
+Проверка дали model name съвпада:
+
+ollama list
+# ползвай същото име в UI/API, напр. llama3.2 или llama3.2:latest
+8. Как да го пренесеш в друг Next.js проект
+8.1. Копирай 3 неща
+app/api/ollama/route.ts (или pages/api/ollama.ts в Pages Router)
+app/components/OllamaTest.tsx (или твой компонент)
+Страница app/ollama-test/page.tsx
+8.2. Настрой alias (ако няма @/)
+В tsconfig.json:
+
+"paths": { "@/*": ["./*"] }
+8.3. .env.local
+OLLAMA_HOST=http://127.0.0.1:11434
+8.4. Стартирай
+npm run dev
+# отвори /ollama-test
+8.5. Вгради в реална страница (не само тест)
+Във app/vault/page.tsx или където искаш:
+
+import OllamaTest from "@/app/components/OllamaTest";
+export default function VaultPage() {
+  return (
+    <div>
+      {/* ... останалото ... */}
+      <OllamaTest />
+    </div>
+  );
+}
+Или само fetch без целия UI:
+
+const res = await fetch("/api/ollama", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    model: "llama3.2",
+    prompt: userQuestion,
+    stream: false,
+  }),
+});
+const data = await res.json();
+setAnswer(data.response);
+9. Други типове проекти
+9.1. React (Vite) без Next.js — нужен е backend
+Браузърът не трябва директно към 11434 в production. Мини Express:
+
+// server.js
+import express from "express";
+const app = express();
+app.use(express.json());
+const OLLAMA = "http://127.0.0.1:11434";
+app.get("/api/ollama", async (_, res) => {
+  const r = await fetch(`${OLLAMA}/api/tags`);
+  res.json(await r.json());
+});
+app.post("/api/ollama", async (req, res) => {
+  const { model, prompt } = req.body;
+  const r = await fetch(`${OLLAMA}/api/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model,
+      stream: false,
+      messages: [
+        { role: "system", content: "Your rules here..." },
+        { role: "user", content: prompt },
+      ],
+    }),
+  });
+  const data = await r.json();
+  res.json({ response: data.message?.content ?? "" });
+});
+app.listen(3001);
+Vite proxy в vite.config.ts:
+
+server: {
+  proxy: {
+    "/api": "http://localhost:3001",
+  },
+},
+Frontend: fetch("/api/ollama", ...) — същото като в Next.
+
+9.2. Node.js (чист скрипт)
+const res = await fetch("http://127.0.0.1:11434/api/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    model: "llama3.2",
+    stream: false,
+    messages: [{ role: "user", content: "Здравей" }],
+  }),
+});
+const data = await res.json();
+console.log(data.message.content);
+Тук няма нужда от proxy — Node не е браузър.
+
+9.3. Python
+import requests
+r = requests.post(
+    "http://127.0.0.1:11434/api/chat",
+    json={
+        "model": "llama3.2",
+        "stream": False,
+        "messages": [
+            {"role": "system", "content": "Cars only..."},
+            {"role": "user", "content": "Какво е VIN?"},
+        ],
+    },
+    timeout=120,
+)
+print(r.json()["message"]["content"])
+9.4. PHP / Laravel
+Същата идея: Http::post('http://127.0.0.1:11434/api/chat', [...]) от controller, не от Blade директно към 11434.
+
+10. Ollama API (референция за други проекти)
+База: http://127.0.0.1:11434
+
+Endpoint	Метод	Употреба
+/api/tags
+GET
+Списък модели
+/api/chat
+POST
+Разговор с roles (препоръчително)
+/api/generate
+POST
+Един prompt string (по-стар стил)
+/api/pull
+POST
+Свали модел
+/api/ps
+GET
+Кои модели са заредени в RAM
+Chat (както ползваш ти)
+{
+  "model": "llama3.2",
+  "stream": false,
+  "messages": [
+    { "role": "system", "content": "..." },
+    { "role": "user", "content": "..." },
+    { "role": "assistant", "content": "..." },
+    { "role": "user", "content": "follow-up" }
+  ]
+}
+Отговор (non-stream):
+
+{
+  "message": {
+    "role": "assistant",
+    "content": "текстът..."
+  }
+}
+Streaming (за бъдеще)
+"stream": true — Ollama връща редове JSON (NDJSON). В Next.js трябва ReadableStream и proxy — по-сложно от текущия тест.
+
+11. Персонализация за друг проект
+Искаш	Промени
+Друга тема (не коли)
+CARS_ONLY_SYSTEM_PROMPT в route.ts
+Друг език
+Добави в system: „Винаги отговаряй на български“
+Фиксиран модел
+Премахни dropdown; hardcode model: "llama3.2"
+История на чата
+Пази messages[] в React state и изпращай целия масив
+По-бързо
+По-малък модел + stream: true в UI
+Пример system prompt за интернет магазин:
+
+You are a shop assistant for [Store Name].
+Only answer about products, orders, shipping, returns.
+Refuse other topics politely in the user's language.
+12. Сигурност и production
+Локално (както сега):
+
+Ollama е само на твоя Mac → безопасно за тест.
+/ollama-test е публичен в middleware — ОК за dev.
+Ако качиш сайта онлайн:
+
+Ollama на сървъра не трябва да е публичен към интернет без auth.
+/api/ollama трябва: login, rate limit, max дължина на prompt.
+OLLAMA_HOST сочи към вътрешен адрес (Docker service name и т.н.).
+Не излагай 11434 през firewall.
+RAM: 7B модел иска ~4–8 GB RAM; на слаб машина ползвай 2B–3B модели.
+
+13. Чеклист „работи ли всичко“
+curl http://127.0.0.1:11434/api/tags → OK
+ollama list → има поне 1 модел
+npm run dev → OK
+http://localhost:3000/ollama-test → зелен статус + модели
+Въпрос за кола → получаваш отговор
+Въпрос за пица → отказ / „само за коли“
+14. Бърза карта: този проект vs друг проект
+┌─────────────────────────────────────────────────────────┐
+│  Този Next.js проект                                     │
+│  Browser → /api/ollama (Next) → Ollama :11434            │
+│  + system prompt в route.ts                            │
+└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  Друг Next.js проект                                     │
+│  Копирай route.ts + компонент + .env OLLAMA_HOST       │
+└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  React/Vite, мобилно app, etc.                           │
+│  Browser → ТВОЙ backend → Ollama :11434                  │
+│  (същите /api/chat и messages[])                        │
+└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────┐
+│  Скрипт / Python / cron                                  │
+│  Директно → http://127.0.0.1:11434/api/chat              │
+└─────────────────────────────────────────────────────────┘
+Ако искаш, мога да добавя това като файл docs/OLLAMA.md в репото или да вградя асистента в Vault страницата вместо отделен /ollama-test.
+
+

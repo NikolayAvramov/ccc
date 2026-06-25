@@ -14,18 +14,18 @@ export default function Footer() {
             Classic Car Center
           </h3>
           <p className="text-sm text-gray-400 leading-relaxed">
-            Discover and showcase the world's most beautiful classic cars. Your
-            premier destination for automotive excellence.
+          Открийте най-красивите класически автомобили в света.
+          Домът на автомобилните шедьоври и редки ексклузивни модели.
           </p>
         </div>
 
         {/* Links */}
         <div>
-          <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
+          <h4 className="text-lg font-semibold mb-3">Бързи препратки</h4>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="/" className="hover:text-orange-400 transition">
-                Home
+                Начална страница
               </Link>
             </li>
             <li>
@@ -33,7 +33,7 @@ export default function Footer() {
                 href="/showroom"
                 className="hover:text-orange-400 transition"
               >
-                Showroom
+                Шоурум
               </Link>
             </li>
             <li>
@@ -41,7 +41,7 @@ export default function Footer() {
                 href="/my-garage"
                 className="hover:text-orange-400 transition"
               >
-                My Garage
+                Моят гараж
               </Link>
             </li>
             <li>
@@ -49,7 +49,7 @@ export default function Footer() {
                 href="/profile"
                 className="hover:text-orange-400 transition"
               >
-                Profile
+                Профил
               </Link>
             </li>
           </ul>
@@ -57,26 +57,26 @@ export default function Footer() {
 
         {/* Support */}
         <div>
-          <h4 className="text-lg font-semibold mb-3">Support</h4>
+          <h4 className="text-lg font-semibold mb-3">Поддръжка</h4>
           <ul className="space-y-2 text-sm">
             <li>
               <Link href="#" className="hover:text-orange-400 transition">
-                About
+                За нас
               </Link>
             </li>
             <li>
               <Link href="#" className="hover:text-orange-400 transition">
-                Contact
+                Контакт
               </Link>
             </li>
             <li>
               <Link href="#" className="hover:text-orange-400 transition">
-                Terms
+                Условия
               </Link>
             </li>
             <li>
               <Link href="#" className="hover:text-orange-400 transition">
-                Privacy
+                Политика за поверителност
               </Link>
             </li>
           </ul>
@@ -84,7 +84,7 @@ export default function Footer() {
 
         {/* Social */}
         <div>
-          <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
+          <h4 className="text-lg font-semibold mb-3">Следвайте ни</h4>
           <div className="flex gap-3 mt-2">
             <a className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-orange-400 hover:text-black transition">
               <AiFillInstagram />

@@ -44,7 +44,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
             href="/"
             className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition hover:-translate-y-[1px]"
           >
-            Home
+            Начална страница
           </Link>
         </li>
 
@@ -63,7 +63,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
             href="/showroom"
             className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition"
           >
-            Showroom
+            Шоурум
           </Link>
         </li>
 
@@ -82,7 +82,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
             href="/vault"
             className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition"
           >
-            Vault
+          Научи повече
           </Link>
         </li>
 
@@ -91,7 +91,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
             href="/vault"
             className="text-gray-200 text-sm px-2 py-1 hover:text-orange-400 transition"
           >
-            Vault
+          Научи повече
           </Link>
         </li>
 
@@ -103,7 +103,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
                 href="/profile"
                 className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition"
               >
-                Profile
+                Профил
               </Link>
             </li>
 
@@ -121,7 +121,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
               onClick={onLogoutClick}
               className="hidden md:block text-gray-200 text-lg px-4 py-2 cursor-pointer hover:text-orange-400 hover:bg-orange-400/10 rounded-md transition"
             >
-              Logout
+              Изход
             </li>
 
             <li
@@ -139,7 +139,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
                 href="/login"
                 className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition"
               >
-                Login
+                Вход
               </Link>
             </li>
 
@@ -158,7 +158,7 @@ export function Navigation({ isLogedIn }: NavigationProps) {
                 href="/register"
                 className="text-gray-200 text-lg px-4 py-2 rounded-md hover:text-orange-400 hover:bg-orange-400/10 transition"
               >
-                Register
+                Регистрация
               </Link>
             </li>
 

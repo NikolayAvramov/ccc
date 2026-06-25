@@ -77,17 +77,17 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
     setError("");
 
     if (!passwordData.currentPassword || !passwordData.newPassword) {
-      setError("All password fields are required");
+      setError("Всички полета за парола са задължителни");
       return;
     }
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setError("Passwords do not match");
+      setError("Паролите не съвпадат");
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      setError("New password must be at least 6 characters");
+      setError("Новата парола трябва да бъде поне 6 символа");
       return;
     }
 
@@ -112,7 +112,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-xl font-bold">Edit Profile</h2>
+          <h2 className="text-xl font-bold">Редактиране на профил</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-lg transition"
@@ -131,7 +131,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            Personal Info
+            Лични данни
           </button>
           <button
             onClick={() => setActiveTab("password")}
@@ -141,7 +141,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
                 : "text-gray-600 hover:text-gray-900"
             }`}
           >
-            Change Password
+            Промяна на парола
           </button>
         </div>
 
@@ -163,7 +163,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
             <form onSubmit={handleUpdateInfo} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
+                  Име
                 </label>
                 <input
                   type="text"
@@ -176,7 +176,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
+                  Фамилия
                 </label>
                 <input
                   type="text"
@@ -189,7 +189,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
+                  Имейл
                 </label>
                 <input
                   type="email"
@@ -206,15 +206,15 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
                 className="w-full mt-6 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 transition font-medium"
               >
                 {updateMutation.isPending
-                  ? "Updating..."
-                  : "Update Information"}
+                  ? "Обновяване..."
+                  : "Обновяване на информация"}
               </button>
             </form>
           ) : (
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Current Password
+                  Текуща парола
                 </label>
                 <input
                   type="password"
@@ -227,7 +227,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  New Password
+                  Нова парола
                 </label>
                 <input
                   type="password"
@@ -240,7 +240,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Confirm Password
+                  Потвърждение на парола
                 </label>
                 <input
                   type="password"
@@ -256,7 +256,7 @@ export default function UpdateProfile({ user, onClose }: UpdateProfileProps) {
                 disabled={updateMutation.isPending}
                 className="w-full mt-6 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 disabled:opacity-50 transition font-medium"
               >
-                {updateMutation.isPending ? "Updating..." : "Change Password"}
+                {updateMutation.isPending ? "Обновяване..." : "Промяна на парола"}
               </button>
             </form>
           )}

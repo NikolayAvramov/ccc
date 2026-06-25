@@ -48,10 +48,10 @@ function AddCarContent() {
     "w-full p-3 border-2 border-gray-200 rounded-lg outline-none focus:border-orange-500 transition";
 
   const steps = [
-    { id: 1, title: "Basic Info", icon: <FaCar /> },
-    { id: 2, title: "Specs", icon: <FaInfo /> },
-    { id: 3, title: "Photos", icon: <FaImage /> },
-    { id: 4, title: "Review", icon: <FaCheck /> },
+    { id: 1, title: "Остновна информация", icon: <FaCar /> },
+    { id: 2, title: "Технически характеристики", icon: <FaInfo /> },
+    { id: 3, title: "Снимки", icon: <FaImage /> },
+    { id: 4, title: "Проверка", icon: <FaCheck /> },
   ];
 
   // ✅ SUBMIT
@@ -69,8 +69,6 @@ function AddCarContent() {
         formData.append("images", file);
       });
 
-      console.log("🚀 SENDING FILES");
-
       const res = await fetch("/api/add-car", {
         method: "POST",
         body: formData,
@@ -83,7 +81,6 @@ function AddCarContent() {
         throw new Error(result.error || "Failed");
       }
 
-      console.log("✅ CREATED:", result);
 
       // reset
       setImageArr([]);
@@ -166,7 +163,7 @@ function AddCarContent() {
       <div className="bg-white w-full max-w-3xl rounded-2xl shadow-xl flex flex-col max-h-[90vh] overflow-hidden">
         {/* HEADER */}
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-2xl font-bold">Add New Car</h2>
+          <h2 className="text-2xl font-bold">Добавяне на нова кола</h2>
           <button
             onClick={() => router.push("/profile")}
             className="text-gray-500"
@@ -214,7 +211,7 @@ function AddCarContent() {
                 onChange={onDataChange}
                 className={inputClass}
               >
-                <option value="">Select make</option>
+                <option value="">Изберете марка</option>
                 {(Object.keys(carMakesAndModels) as CarMake[]).map((make) => (
                   <option key={make} value={make}>
                     {make}
@@ -229,7 +226,7 @@ function AddCarContent() {
                 disabled={!formValues.make}
                 className={inputClass}
               >
-                <option value="">Select model</option>
+                <option value="">Изберете модел</option>
                 {models.map((model) => (
                   <option key={model} value={model}>
                     {model}
@@ -243,7 +240,7 @@ function AddCarContent() {
                 onChange={onDataChange}
                 className={inputClass}
               >
-                <option value="">Select type</option>
+                <option value="">Изберете тип</option>
                 <option value="Sedan">Sedan</option>
                 <option value="Coupe">Coupe</option>
                 <option value="Convertible">Convertible</option>
@@ -261,19 +258,19 @@ function AddCarContent() {
             <div className="grid gap-4">
               <input
                 name="year"
-                placeholder="Year"
+                placeholder="Година"
                 className={inputClass}
                 onChange={onDataChange}
               />
               <input
                 name="price"
-                placeholder="Price"
+                placeholder="Цена"
                 className={inputClass}
                 onChange={onDataChange}
               />
               <input
                 name="mileage"
-                placeholder="Mileage"
+                placeholder="Пробег"
                 className={inputClass}
                 onChange={onDataChange}
               />
@@ -284,7 +281,7 @@ function AddCarContent() {
                 onChange={onDataChange}
                 className={inputClass}
               >
-                <option value="">Select country</option>
+                <option value="">Изберете страна</option>
                 {countries.map((c: string) => (
                   <option key={c} value={c}>
                     {c}
@@ -309,7 +306,7 @@ function AddCarContent() {
               onDrop={handleDrop}
             >
               <FaUpload className="mx-auto text-3xl text-orange-400 mb-2" />
-              Click or drag images here
+              Кликнете или плъзнете снимки тук
               <input
                 type="file"
                 multiple
@@ -333,7 +330,7 @@ function AddCarContent() {
           {currentStep === 4 && (
             <textarea
               name="description"
-              placeholder="Description..."
+              placeholder="Описание..."
               className={`${inputClass} h-32`}
               onChange={onDataChange}
             />
@@ -356,7 +353,7 @@ function AddCarContent() {
               disabled={!isStepValid(currentStep)}
               className="bg-orange-500 text-white px-5 py-2 rounded-lg"
             >
-              Next <FaArrowRight />
+              Следващ <FaArrowRight />
             </button>
           ) : (
             <button
@@ -364,7 +361,7 @@ function AddCarContent() {
               disabled={!isStepValid(currentStep)}
               className="bg-green-500 text-white px-5 py-2 rounded-lg"
             >
-              <FaCheck /> Submit
+            <FaCheck /> Потвърди
             </button>
           )}
         </div>

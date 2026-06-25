@@ -57,7 +57,7 @@ export default function Card({ info }: { info: Car }) {
 
         <p className="text-orange-500 font-semibold text-lg">${info.price}</p>
 
-        <p className="text-gray-500 text-sm mb-2">Year: {info.year}</p>
+        <p className="text-gray-500 text-sm mb-2">Година: {info.year}</p>
 
         <p className="text-gray-600 text-sm line-clamp-3">{info.description}</p>
       </div>

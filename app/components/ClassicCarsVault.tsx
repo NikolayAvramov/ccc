@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 
+import CarAssistantPanel from "@/app/components/CarAssistantPanel";
+
 const getFaqItems = (car: any) => [
   {
     key: "investment",
@@ -136,10 +138,10 @@ export default function ClassicCarsVault() {
         <>
           <div className="border-b border-white/10 px-4 pb-12 pt-24 text-center md:px-8">
             <h1 className="mb-4 text-4xl font-bold text-orange-400 md:text-5xl">
-              🏛️ Хранилище на Класически Коли
+              🏛️ Научи повече за класическите коли
             </h1>
             <p className="mx-auto mb-8 max-w-2xl text-base leading-relaxed text-neutral-400 md:text-lg">
-              Откройте историята, спецификациите и стойността на най-известните автомобили в света. Всяка кола е легенда.
+              Открийте историята, спецификациите и стойността на най-известните автомобили в света. Всяка кола е легенда.
             </p>
             <div className="mx-auto max-w-xl">
               <input
@@ -155,14 +157,14 @@ export default function ClassicCarsVault() {
                     href="/vault/add"
                     className="inline-flex rounded-lg bg-orange-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-orange-600"
                   >
-                    + Add Article
+                    + Добавяне на статия
                   </Link>
                   <button
                     type="button"
                     onClick={handleMigrateLocalData}
                     className="ml-2 inline-flex rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
                   >
-                    Migrate Local Data
+                    Пренасяне на локални данни
                   </button>
                 </div>
               )}
@@ -255,7 +257,7 @@ export default function ClassicCarsVault() {
             onClick={() => setSelectedCar(null)}
           >
             <FaChevronLeft className="mr-2" />
-            Назад в хранилището
+            Назад
           </button>
           {isAdmin && selectedCar._source === "db" && selectedCar._dbId && (
             <>
@@ -263,13 +265,13 @@ export default function ClassicCarsVault() {
                 href={`/vault/edit/${selectedCar._dbId}`}
                 className="mb-8 ml-3 inline-flex items-center rounded-lg border border-white/20 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10"
               >
-                Edit Article
+                Редактиране на статията
               </Link>
               <button
                 onClick={() => handleDelete(selectedCar._dbId)}
                 className="mb-8 ml-3 inline-flex items-center rounded-lg border border-red-400/60 px-4 py-2 text-sm font-semibold text-red-300 transition hover:bg-red-500/10"
               >
-                Delete Article
+                Изтриване на статията
               </button>
             </>
           )}
@@ -345,6 +347,18 @@ export default function ClassicCarsVault() {
                     ?.answer ?? "Няма налична информация."}
                 </div>
               </div>
+
+              <CarAssistantPanel
+                variant="dark"
+                title="🤖 Питай асистента"
+                subtitle={`Задай свободен въпрос за ${selectedCar.name} — асистентът търси в базата данни на Classic Car Center.`}
+                placeholder={`Напр.: Защо ${selectedCar.name} е ценена от колекционери?`}
+                suggestedQuestions={[
+                  `Какво да проверя при покупка на ${selectedCar.name}?`,
+                  `Каква е състезателната история на ${selectedCar.name}?`,
+                  `Защо ${selectedCar.name} е ценена от колекционери?`,
+                ]}
+              />
             </div>
 
             <div>

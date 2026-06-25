@@ -2,6 +2,8 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import CarAssistantWidget from "@/app/components/CarAssistantWidget";
+
 const queryClient = new QueryClient();
 
 export default function ClientWrapper({
@@ -10,6 +12,9 @@ export default function ClientWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      {children}
+      <CarAssistantWidget />
+    </QueryClientProvider>
   );
 }

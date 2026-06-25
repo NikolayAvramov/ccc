@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import ProtectedRoute from "@/app/components/ProtectedRoute";
-
+import { getUserProfile } from "@/services/userServices";
+import { fetchConversations } from "@/services/messageService";
 type Message = {
   id: string;
   content: string;
@@ -30,29 +31,15 @@ type CurrentUser = {
   id: string;
 };
 
-async function fetchCurrentUser(): Promise<CurrentUser> {
-  const res = await fetch("/api/user", {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch user");
-  return res.json();
-}
 
-async function fetchConversations(): Promise<Conversation[]> {
-  const res = await fetch("/api/conversations", {
-    credentials: "include",
-  });
 
-  if (!res.ok) throw new Error("Failed to fetch conversations");
-  return res.json();
-}
 
 function ConversationsContent() {
   const router = useRouter();
 
   const { data: currentUser } = useQuery({
     queryKey: ["currentUser"],
-    queryFn: fetchCurrentUser,
+    queryFn: getUserProfile,
     retry: false,
   });
 

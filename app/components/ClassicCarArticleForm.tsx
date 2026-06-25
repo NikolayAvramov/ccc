@@ -157,20 +157,20 @@ export default function ClassicCarArticleForm({
         </div>
 
         <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <input name="name" placeholder="Car name" className={baseInput} value={form.name} onChange={onChange} required />
-            <input name="make" placeholder="Make" className={baseInput} value={form.make} onChange={onChange} required />
-            <input name="year" placeholder="Year" type="number" className={baseInput} value={form.year} onChange={onChange} required />
-            <input name="country" placeholder="Country" className={baseInput} value={form.country} onChange={onChange} required />
-            <input name="era" placeholder="Era (e.g. 1960s)" className={baseInput} value={form.era} onChange={onChange} required />
-            <input name="type" placeholder="Type" className={baseInput} value={form.type} onChange={onChange} required />
-            <input name="produced" placeholder="Produced units" type="number" className={baseInput} value={form.produced} onChange={onChange} required />
-            <input name="engine" placeholder="Engine" className={baseInput} value={form.engine} onChange={onChange} required />
-            <input name="horsepower" placeholder="Horsepower (e.g. 302 or 60-75)" className={baseInput} value={form.horsepower} onChange={onChange} required />
-            <input name="topSpeed" placeholder="Top speed (km/h)" type="number" className={baseInput} value={form.topSpeed} onChange={onChange} required />
-            <input name="price" placeholder="Price range" className={baseInput} value={form.price} onChange={onChange} required />
-            <input name="rarity" placeholder="Rarity" className={baseInput} value={form.rarity} onChange={onChange} required />
-            <input name="designer" placeholder="Designer" className={baseInput} value={form.designer} onChange={onChange} required />
-            <input name="weight" placeholder="Weight" className={baseInput} value={form.weight} onChange={onChange} required />
+            <input name="name" placeholder="Име на колата" className={baseInput} value={form.name} onChange={onChange} required />
+            <input name="make" placeholder="Марка" className={baseInput} value={form.make} onChange={onChange} required />
+            <input name="year" placeholder="Година" type="number" className={baseInput} value={form.year} onChange={onChange} required />
+            <input name="country" placeholder="Страна" className={baseInput} value={form.country} onChange={onChange} required />
+            <input name="era" placeholder="Епоха (e.g. 1960s)" className={baseInput} value={form.era} onChange={onChange} required />
+            <input name="type" placeholder="Тип" className={baseInput} value={form.type} onChange={onChange} required />
+            <input name="produced" placeholder="Произведено единици" type="number" className={baseInput} value={form.produced} onChange={onChange} required />
+            <input name="engine" placeholder="Двигател" className={baseInput} value={form.engine} onChange={onChange} required />
+            <input name="horsepower" placeholder="Мощност (e.g. 302 or 60-75)" className={baseInput} value={form.horsepower} onChange={onChange} required />
+            <input name="topSpeed" placeholder="Макс. Скорост (km/h)" type="number" className={baseInput} value={form.topSpeed} onChange={onChange} required />
+            <input name="price" placeholder="Цена" className={baseInput} value={form.price} onChange={onChange} required />
+            <input name="rarity" placeholder="Редкост" className={baseInput} value={form.rarity} onChange={onChange} required />
+            <input name="designer" placeholder="Дизайнер" className={baseInput} value={form.designer} onChange={onChange} required />
+            <input name="weight" placeholder="Тегло" className={baseInput} value={form.weight} onChange={onChange} required />
             <div
               className={`md:col-span-2 rounded-2xl border-2 border-dashed p-4 transition ${
                 isDragging
@@ -189,7 +189,7 @@ export default function ClassicCarArticleForm({
               }}
             >
               <label className="mb-2 block text-sm text-neutral-300">
-                Car Images (up to 5)
+                Снимки на колата (до 5)
               </label>
               <input
                 type="file"
@@ -202,7 +202,7 @@ export default function ClassicCarArticleForm({
                 required={mode === "create" && existingImages.length === 0 && newImageFiles.length === 0}
               />
               <p className="mt-2 text-xs text-neutral-400">
-                Drag & drop or choose files ({existingImages.length + newImageFiles.length}/5).
+                Плъзнете и пуснете или изберете файлове ({existingImages.length + newImageFiles.length}/5).
               </p>
               <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
                 {existingImages.map((img, idx) => (
@@ -243,20 +243,20 @@ export default function ClassicCarArticleForm({
                 ))}
               </div>
             </div>
-            <textarea name="description" placeholder="Short description" className={`${baseInput} min-h-28 md:col-span-2`} value={form.description} onChange={onChange} required />
-            <textarea name="fullHistory" placeholder="Full history" className={`${baseInput} min-h-36 md:col-span-2`} value={form.fullHistory} onChange={onChange} required />
-            <textarea name="raceHistory" placeholder="Race history" className={`${baseInput} min-h-24 md:col-span-2`} value={form.raceHistory} onChange={onChange} required />
-            <textarea name="collectorsInfo" placeholder="Collectors info" className={`${baseInput} min-h-24 md:col-span-2`} value={form.collectorsInfo} onChange={onChange} required />
-            <textarea name="highlights" placeholder={"Highlights (one per line)\nFirst highlight\nSecond highlight"} className={`${baseInput} min-h-32 md:col-span-2`} value={form.highlights} onChange={onChange} required />
+            <textarea name="description" placeholder="Кратко описание" className={`${baseInput} min-h-28 md:col-span-2`} value={form.description} onChange={onChange} required />
+            <textarea name="fullHistory" placeholder="Пълна история" className={`${baseInput} min-h-36 md:col-span-2`} value={form.fullHistory} onChange={onChange} required />
+            <textarea name="raceHistory" placeholder="История на състезанията" className={`${baseInput} min-h-24 md:col-span-2`} value={form.raceHistory} onChange={onChange} required />
+            <textarea name="collectorsInfo" placeholder="Информация за колекционери" className={`${baseInput} min-h-24 md:col-span-2`} value={form.collectorsInfo} onChange={onChange} required />
+            <textarea name="highlights" placeholder={"Акценти (по един на ред)\nПърви акцент\nВтори акцент"} className={`${baseInput} min-h-32 md:col-span-2`} value={form.highlights} onChange={onChange} required />
 
             {error && <p className="md:col-span-2 text-sm text-red-400">{error}</p>}
 
             <div className="md:col-span-2 flex gap-3 pt-2">
               <button type="button" onClick={() => router.push("/vault")} className="rounded-lg border border-white/15 px-4 py-2 text-sm hover:bg-white/5">
-                Cancel
+                Отказ
               </button>
               <button type="submit" disabled={isSaving} className="rounded-lg bg-orange-500 px-5 py-2 text-sm font-semibold text-white transition hover:bg-orange-600 disabled:opacity-60">
-                {isSaving ? "Saving..." : mode === "create" ? "Create Article" : "Save Changes"}
+                {isSaving ? "Запазване..." : mode === "create" ? "Създаване на статия" : "Запазване на промени"}
               </button>
             </div>
         </form>

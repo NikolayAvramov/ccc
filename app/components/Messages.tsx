@@ -3,81 +3,16 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FaTimes, FaPaperPlane } from "react-icons/fa";
+import {
+  createConversation,
+  fetchConversation,
+  fetchConversations,
+  fetchCurrentUser,
+  sendMessage,
+  type ChatMessage,
+} from "@/services/messageService";
 
-type Message = {
-  id: string;
-  content: string;
-  senderId: string;
-  createdAt: string;
-  sender: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    avatar?: string;
-  };
-};
 
-type Conversation = {
-  id: string;
-  senderId: string;
-  receiverId: string;
-  sender: any;
-  receiver: any;
-  messages: Message[];
-};
-
-type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-};
-
-async function fetchCurrentUser(): Promise<User> {
-  const res = await fetch("/api/user", { credentials: "include" });
-  if (!res.ok) throw new Error("Failed to fetch user");
-  return res.json();
-}
-
-async function fetchConversations(): Promise<Conversation[]> {
-  const res = await fetch("/api/conversations", {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch conversations");
-  return res.json();
-}
-
-async function fetchConversation(id: string): Promise<Conversation> {
-  const res = await fetch(`/api/conversations/${id}`, {
-    credentials: "include",
-  });
-  if (!res.ok) throw new Error("Failed to fetch conversation");
-  return res.json();
-}
-
-async function sendMessage(conversationId: string, content: string) {
-  const res = await fetch("/api/messages", {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ conversationId, content }),
-  });
-
-  if (!res.ok) throw new Error("Failed to send message");
-  return res.json();
-}
-
-// 🔥 ВАЖНО: само carId
-async function createConversation(carId: string): Promise<Conversation> {
-  const res = await fetch("/api/conversations", {
-    method: "POST",
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ carId }),
-  });
-
-  if (!res.ok) throw new Error("Failed to create conversation");
-  return res.json();
-}
 
 interface MessagesProps {
   onClose: () => void;
@@ -90,6 +25,8 @@ export default function Messages({ onClose, carId }: MessagesProps) {
   >(null);
   const [messageText, setMessageText] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const getErrorMessage = (err: unknown) =>
+    err instanceof Error ? err.message : "Unexpected error";
 
   const queryClient = useQueryClient();
 
@@ -131,8 +68,8 @@ export default function Messages({ onClose, carId }: MessagesProps) {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     },
 
-    onError: (err: any) => {
-      setError(err.message);
+    onError: (err: unknown) => {
+      setError(getErrorMessage(err));
     },
   });
 
@@ -145,8 +82,8 @@ export default function Messages({ onClose, carId }: MessagesProps) {
       setSelectedConversation(data.id);
     },
 
-    onError: (err: any) => {
-      setError(err.message);
+    onError: (err: unknown) => {
+      setError(getErrorMessage(err));
     },
   });
 
@@ -263,7 +200,7 @@ export default function Messages({ onClose, carId }: MessagesProps) {
                 {/* MESSAGES CONTAINER */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
                   {selectedConv?.messages && selectedConv.messages.length > 0 ? (
-                    selectedConv.messages.map((msg, index) => {
+                    selectedConv.messages.map((msg: ChatMessage, index: number) => {
                       const isOwn = msg.senderId === currentUser?.id;
                       const showTimestamp =
                         index === 0 ||
