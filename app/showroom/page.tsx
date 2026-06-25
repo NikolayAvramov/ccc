@@ -42,12 +42,13 @@ export default function Showroom() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center"
+      className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed"
       style={{
-        backgroundImage: "url('/assets/road-forest_1127-3079.jpg')",
+        backgroundImage:
+          "linear-gradient(rgba(10,15,25,0.72), rgba(10,15,25,0.85)), url('/homeBG.jpeg')",
       }}
     >
-      <div className="min-h-screen bg-black/70 px-6 py-24">
+      <div className="min-h-screen px-6 py-24">
         <div className="max-w-7xl mx-auto">
           {/* HEADER */}
           <div className="text-center mb-12">
@@ -55,7 +56,7 @@ export default function Showroom() {
               Classic Car Showroom
             </h1>
 
-            <p className="text-orange-300 uppercase tracking-widest mb-10">
+            <p className="mb-10 uppercase tracking-widest text-[#f3a36a]">
               Discover extraordinary automobiles from history
             </p>
 
@@ -67,7 +68,7 @@ export default function Showroom() {
                   placeholder="Search by make, model, year, location..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full p-4 pl-12 pr-12 rounded-full bg-black/50 text-white border border-white/20 backdrop-blur-lg focus:outline-none focus:ring-4 focus:ring-orange-300/20 focus:border-orange-400 transition"
+                  className="w-full rounded-full border border-white/20 bg-black/40 p-4 pl-12 pr-12 text-white backdrop-blur-md transition focus:border-[#f3a36a] focus:outline-none focus:ring-4 focus:ring-[#f3a36a]/25"
                 />
 
                 {/* ICON */}
@@ -79,7 +80,7 @@ export default function Showroom() {
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white/10 hover:bg-orange-400 text-white hover:text-black transition"
+                    className="absolute right-4 top-1/2 h-8 w-8 -translate-y-1/2 rounded-full bg-white/10 text-white transition hover:bg-[#f3a36a] hover:text-black"
                   >
                     ✕
                   </button>
